@@ -1,6 +1,6 @@
 import React from 'react';
 
-const list = [
+const stories = [
   {
     title: 'React',
     url: 'https://reactjs.org/',
@@ -37,17 +37,17 @@ const App = () => {
 
       <hr />
 
-      <List />
+      <List list={stories} />
     </div>
   );
 }
 
-const List = () => {
+const List = props => {
   return (
-    list.map(item =>
+    props.list.map(item =>
       <div key={item.objectID}>
         <span>
-          <a href={item.url} target='_blank'>{item.title}</a>
+          <a href={item.url} target='_blank' rel='noopener noreferrer'>{item.title}</a>
         </span>
         <span>{item.author}</span>
         <span>{item.num_comments}</span>
