@@ -30,7 +30,7 @@ const App = () => {
     }
   ];
 
-  const [stories, setStories] = React.useState(initialStories);
+  const [stories, setStories] = React.useState([]);
 
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
 
@@ -44,6 +44,19 @@ const App = () => {
   }
 
   const searchStories = stories.filter(story => story.title.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  const getAsyncStories = () =>
+    new Promise(resolve =>
+      setTimeout(() =>
+        resolve({ data: { stories: initialStories }})
+      , 2000)
+    );
+
+  React.useEffect(() => {
+    getAsyncStories().then(result => {
+      setStories(result.data.stories);
+    });
+  }, []);
 
   return (
     <div>
