@@ -34,6 +34,10 @@ const App = () => {
 
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
 
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const [isError, setIsError] = React.useState(null);
+
   const handleSearch = event => {
     setSearchTerm(event.target.value);
   }
@@ -53,9 +57,14 @@ const App = () => {
     );
 
   React.useEffect(() => {
+    setIsLoading(true);
     getAsyncStories().then(result => {
       setStories(result.data.stories);
-    });
+      setIsLoading(false);
+      setIsError(null);
+    }).catch(() => {
+      setIsError(true);
+    })
   }, []);
 
   return (
@@ -73,7 +82,13 @@ const App = () => {
 
       <hr />
 
-      <List list={searchStories} onRemoveItem={handleRemoveStories} />
+      {isError && <p>Something went wrong...</p>}
+
+      {
+        isLoading ?
+        <p>Loading..</p> :
+        <List list={searchStories} onRemoveItem={handleRemoveStories} />
+      }
     </div>
   );
 }
